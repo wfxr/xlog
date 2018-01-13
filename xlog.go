@@ -53,20 +53,12 @@ func WarnMsg(msg ...interface{}) {
 	withLevel(log.Warn(), msg...)
 }
 
-func WarnErr(err error) {
-	withLevelWhenError(log.Warn(), err, "")
-}
-
 func Fatal(err error, msg ...interface{}) {
 	withLevelWhenError(log.Fatal(), err, msg...)
 }
 
 func FatalMsg(msg ...interface{}) {
 	withLevel(log.Fatal(), msg...)
-}
-
-func FatalErr(err error) {
-	withLevelWhenError(log.Fatal(), err, "")
 }
 
 func Debugf(format string, v ...interface{}) {
