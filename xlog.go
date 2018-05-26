@@ -88,3 +88,15 @@ func Warnf(err error, format string, v ...interface{}) {
 func Errorf(err error, format string, v ...interface{}) {
 	withLevelWhenErrorf(log.Error(), err, format, v...)
 }
+
+func WarnMsgf(format string, msg ...interface{}) {
+	withLevelf(log.Warn(), format, msg...)
+}
+
+func ErrorMsgf(format string, msg ...interface{}) {
+	withLevelf(log.Error(), format, msg...)
+}
+
+func FatalMsgf(format string, msg ...interface{}) {
+	withLevelf(log.Fatal(), format, msg...)
+}
