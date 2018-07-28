@@ -3,18 +3,39 @@ package xlog
 import (
 	"fmt"
 	"os"
+	"time"
 
-	"github.com/mattn/go-isatty"
+	isatty "github.com/mattn/go-isatty"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
+
+var DefaultTimeFieldFormat = time.RFC3339Nano
+var SimpleTimeFieldFormat = "2006-01-02 15:04:05.000"
 
 func init() {
 	if isatty.IsTerminal(os.Stderr.Fd()) {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
-	zerolog.SetGlobalLevel(zerolog.InfoLevel)
-	zerolog.TimeFieldFormat = "2006-01-02 15:04:05.000"
+	switch os.Getenv("XLOG_LEVEL") {
+	case "DEBUG":
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case "", "INFO":
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	case "WARN":
+		zerolog.SetGlobalLevel(zerolog.WarnLevel)
+	case "ERROR":
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	case "FATAL":
+		zerolog.SetGlobalLevel(zerolog.FatalLevel)
+	case "PANIC":
+		zerolog.SetGlobalLevel(zerolog.PanicLevel)
+	case "NOLEVEL":
+		zerolog.SetGlobalLevel(zerolog.NoLevel)
+	case "DISABLED":
+		zerolog.SetGlobalLevel(zerolog.Disabled)
+	}
+	zerolog.TimeFieldFormat = DefaultTimeFieldFormat
 }
 
 func withLevel(event *zerolog.Event, msg ...interface{}) {
